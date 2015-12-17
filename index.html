@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<meta charset='utf-8'>
+<style>
+
+body {
+  color: #f00;
+  background: #eee;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+  text-align: center;
+}
+
+div {
+  margin: 0 auto;
+}
+
+.arc text {
+  font: 10px sans-serif;
+  text-anchor: middle;
+}
+
+.arc path {
+  stroke: #fff;
+}
+
+</style>
+<body>
+<h1>H&D scraped: 17350 books</h1>
+<div></div>
+<h2>Distribution by Author's Gender<h2>
+<h3>Data source: <a href='http://oba.nl'>oba.nl</a>, December 2015</h3>
+<script src='http://d3js.org/d3.v3.min.js'></script>
+<script>
+
+var total = 17350;
+
+var width = 960,
+    height = 500,
+    radius = Math.min(width, height) / 2;
+
+var color = d3.scale.ordinal()
+    .range(['#000000', '#444444', '#888888', '#cccccc', '#eeeeee']);
+
+var arc = d3.svg.arc()
+    .outerRadius(radius - 10)
+    .innerRadius(radius - 70);
+
+var pie = d3.layout.pie()
+    .sort(null)
+    .value(function(d) { return d.books; });
+
+var svg = d3.select('div').append('svg')
+    .attr('width', width)
+    .attr('height', height)
+    .append('g')
+    .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+
+d3.csv('data.csv', type, function(error, data) {
+  if (error) throw error;
+
+  var g = svg.selectAll('.arc')
+      .data(pie(data))
+      .enter().append('g')
+      .attr('class', 'arc');
+
+  g.append('path')
+      .attr('d', arc)
+      .style('fill', function(d) { return color(d.data.gender); });
+
+  g.append('text')
+      .attr('transform', function(d) { return 'translate(' + arc.centroid(d) + ')'; })
+      .attr('dy', '.35em')
+      .style('font-size','34px')
+      .style('fill','#f00')
+      .style('text-shadow','2px 2px 5px #000')
+      .text(function(d) { return d.data.gender + ': ' + (d.data.books / total * 100).toFixed(0) + '% (' + d.data.books + ')'; });
+});
+
+function type(d) {
+  d.population = +d.population;
+  return d;
+}
+
+</script>
+</body>
+</html>
+
+
