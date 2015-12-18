@@ -15,4 +15,5 @@ Start the bot
     python oba-bot.py
 
 If you are missing dependencies:
+
     pip install <module_name>
