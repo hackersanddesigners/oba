@@ -7,10 +7,12 @@ https://www.mongodb.org/
 
 Start MongoDB
 -------------
-mongod --dbpath data
+    mkdir data
+    mongod --dbpath data
 
 Start the bot
 -------------
-python oba-bot.py
+    python oba-bot.py
 
-
+If you are missing dependencies:
+    pip install <module_name>
